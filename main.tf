@@ -6,7 +6,7 @@ provider "aws" {
 }
 
 module "first" {
-  source    = "modules/ssm"
+  source    = "./modules/ssm"
   name      = "first"
   data      = "secret123"
   providers = {
@@ -15,7 +15,7 @@ module "first" {
 }
 
 module "second" {
-  source    = "modules/ssm"
+  source    = "./modules/ssm"
   name      = "second"
   data      = "random"
   providers = {
