@@ -8,7 +8,7 @@ provider "aws" {
 module "first" {
   source    = "./modules/ssm"
   name      = "first"
-  data      = "secret123"
+  data      = "{\"password\": \"Secret123!@#\"}"
   providers = {
     aws = aws.cloud
   }
