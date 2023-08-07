@@ -17,7 +17,7 @@ jobs:
 
       - name: Run Terraform Plan and Apply
         run: |
-          ./terraform_plan_apply.sh
+          FIREFLY_ACCESS_KEY=${{ secrets.FIREFLY_ACCESS_KEY }} FIREFLY_SECRET_KEY=${{ secrets.FIREFLY_SECRET_KEY }} ./terraform_plan_apply.sh
         env:
           TF_ACTION: "true" # Enable non-interactive mode for Terraform (optional)
           AWS_REGION: "eu-central-1"
