@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get fireflyci
-curl -O <https://gofirefly-prod-iac-ci-cli-binaries.s3.amazonaws.com/fireflyci/v0.0.16/fireflyci_Linux_x86_64.tar.gz
+curl -O <https://gofirefly-prod-iac-ci-cli-binaries.s3.amazonaws.com/fireflyci/v0.0.27/fireflyci_Linux_x86_64.tar.gz
 tar -xf fireflyci_Linux_x86_64.tar.gz
 chmod a+x fireflyci
 
