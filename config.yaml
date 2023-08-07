@@ -1,0 +1,18 @@
+must:
+  - 1ec253ab-c220-4d63-b2de-5b40e0af9293  # RDS Cluster With Backup Disabled
+  - f83121ea-03da-434f-9277-9cd247ab3047  # VPC FlowLogs Disabled
+  - cc997676-481b-4e93-aa81-d19f8c5e9b12  # EBS Volume Encryption Disabled
+  - 2f737336-b18a-4602-8ea0-b200312e1ac1  # RDS Associated with Public Subnet
+  - 5fb49a69-8d46-4495-a2f8-9c8c622b2b6e  # S3 Bucket Object Not Encrypted
+  - 65905cec-d691-4320-b320-2000436cb696  # Security Group With Unrestricted Access To SSH
+  - 28545147-2fc6-42d5-a1f9-cf226658e591  # SNS Topic Not Encrypted
+  - d0cc8694-fcad-43ff-ac86-32331d7e867f  # S3 Bucket Allows Public ACL
+  - 1a4bc881-9f69-4d44-8c9a-d37d08f54c50  # S3 Bucket Allows Public Policy
+  - 4fa66806-0dd9-4f8d-9480-3174d39c7c91  # S3 Bucket Without Ignore Public ACL
+  - 575a2155-6af1-4026-b1af-d5bc8fe2a904  # IAM Policy Grants Full Permissions
+  - cfdcabb0-fc06-427c-865b-c59f13e898ce  # Redshift Not Encrypted
+  - 1419b4c6-6d5c-4534-9cf6-6a5266085333  # CloudFront Without WAF
+  - 94690d79-b3b0-43de-b656-84ebef5753e5  # CloudFront Logging Disabled
+  - af173fde-95ea-4584-b904-bb3923ac4bda  # Redshift Publicly Accessible
+  - 20018359-6fd7-4d05-ab26-d4dffccbdf79  # ELB Access Log Disabled
+  - e542bd46-58c4-4e0f-a52a-1fb4f9548e02  # RDS Cluster With Backup Disabled
