@@ -1,0 +1,67 @@
+trigger:
+- '*'
+
+pr:
+- '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  awsAccessKey: $(AWS_ACCESS_KEY)
+  awsSecretKey: $(AWS_SECRET_ACCESS_KEY)
+  fireflyAccessKey: $(FIREFLY_ACCESS_KEY)
+  fireflySecretKey: $(FIREFLY_SECRET_KEY)
+
+stages:
+- stage: TerraformPlan
+  jobs:
+  - job: TerraformPlan
+    displayName: 'Terraform Plan'
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.x'
+        addToPath: true
+
+    - script: |
+        # Install Terraform
+        curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt-get update && sudo apt-get install terraform -y
+        curl -O https://gofirefly-prod-iac-ci-cli-binaries.s3.amazonaws.com/fireflyci/v0.0.31/fireflyci_Linux_x86_64.tar.gz
+        tar -xf fireflyci_Linux_x86_64.tar.gz
+        chmod a+x fireflyci
+        echo "running fireflyci"
+        ./fireflyci configure -a="$(fireflyAccessKey)" -s="$(fireflySecretKey)"
+        uname -m 
+        echo "curl to firefly"
+        curl --location 'https://prodapi.gofirefly.io/api/account/access_keys/login' --header 'Content-Type: application/json' --data '{"accessKey": "$(fireflyAccessKey)", "secretKey": "$(fireflySecretKey)"}'
+
+        export AWS_ACCESS_KEY_ID=$(awsAccessKey)
+        export AWS_SECRET_ACCESS_KEY=$(awsSecretKey)
+        export AWS_REGION=us-west-1
+        export FIREFLY_ACCESS_KEY=$(fireflyAccessKey)
+        export FIREFLY_SECRET_KEY=$(fireflySecretKey)
+        export TF_ACTION=true
+
+        terraform init
+        echo "done with init"
+
+        # Run Terraform plan and save the output to plan.json
+        terraform plan -lock=false -out terraform.plan
+        echo "done with plan"
+        # generate json output
+        terraform show -json terraform.plan > terraform.json
+        echo "done with show"
+        ./fireflyci scan -f="terraform.json" --timeout=180
+        echo "done with fireflyci"
+
+        
+      displayName: 'Run Terraform Plan'
+
+    - task: PublishPipelineArtifact@0
+      inputs:
+        targetPath: './terraform.json'
+        artifactName: 'TerraformPlan'
+      displayName: 'Publish Terraform Plan Artifact'
